@@ -24,10 +24,10 @@ mesh = THREE.Mesh(geometry, THREE.MeshStandardMaterial(sice='DoubleSide', wirefr
 
 # %%
 def viewer_cloth(cloth):
-    view_width = 400
-    view_height = 400
+    view_width = 800
+    view_height = 600
     camera = THREE.PerspectiveCamera(
-        position=[30, 15, 15], aspect=view_width/view_height)
+        position=[20, 5, 30], aspect=view_width/view_height)
     key_light = THREE.DirectionalLight(position=[10, 10, 10])
     ambient_light = THREE.AmbientLight()
     axes_helper = THREE.AxesHelper(0.5)
@@ -43,13 +43,33 @@ def viewer_cloth(cloth):
 viewer = viewer_cloth(mesh)
 viewer
 
+# # %%
+# cloth1 = cloth(x0, N, t2=False, d=True)
+# cloth1.add_springs()
+# cloth1.cuff_cloth()
+# t = 0
+# while t < 500:
+#     delta = cloth1.time_step()
+#     mesh.geometry.attributes['position'].array = mesh.geometry.attributes['position'].array + delta
+#     t += 1
 # %%
-cloth = cloth(x0, N)
-cloth.add_springs()
-cloth.cuff_cloth()
+# mesh.geometry.attributes['position'].array = x0
+# cloth2 = cloth(x0, N, t2=True, d=False)
+# cloth2.add_springs()
+# cloth2.cuff_cloth()
+# t = 0
+# while t < 500:
+#     delta = cloth2.time_step()
+#     mesh.geometry.attributes['position'].array = mesh.geometry.attributes['position'].array + delta
+#     t += 1
+# %%
+mesh.geometry.attributes['position'].array = x0
+cloth3 = cloth(x0, N, t2=True, d=True)
+cloth3.add_springs()
+cloth3.cuff_cloth()
 t = 0
-while t < 500:
-    delta = cloth.time_step()
+while t < 1000:
+    delta = cloth3.time_step()
     mesh.geometry.attributes['position'].array = mesh.geometry.attributes['position'].array + delta
     t += 1
 # %%

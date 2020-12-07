@@ -15,10 +15,16 @@ class cloth:
     t2s = []
     # time interval
     h = 0.01
+    # activate type2 force
+    t2 = False
+    # activate damping
+    d = True
 
-    def __init__(self, x0, N):
+    def __init__(self, x0, N, t2, d):
         self.N = N
         self.ps = np.empty((N+1, N+1), dtype=np.object)
+        self.t2 = t2
+        self.d = d
         i = 0
         j = 0
         assert len(x0) == (N+1)**2
@@ -116,20 +122,20 @@ class cloth:
         for t1 in t1set:
             p1 = self.ps[int(t1[0]/(N+1)), int(t1[0]%(N+1))]
             p2 = self.ps[int(t1[1]/(N+1)), int(t1[1]%(N+1))]
-            spring = t1spring(p1, p2)
+            spring = t1spring(p1, p2, self.d)
             self.t1s.append(spring)
 
         for t2 in t2set:
             p1 = self.ps[int(t2[0]/(N+1)), int(t2[0]%(N+1))]
             p2 = self.ps[int(t2[1]/(N+1)), int(t2[1]%(N+1))]
-            spring = t2spring(p1, p2)
+            spring = t2spring(p1, p2, self.d)
             self.t2s.append(spring)
         
     
     def cuff_cloth(self):
-        for i in range(self.N+1):
-            self.ps[0, i].cuff()
-            self.ps[i, 0].cuff()
+        # for i in range(self.N+1):
+        #     self.ps[0, i].cuff()
+        #     self.ps[i, 0].cuff()
         self.ps[0, 0].cuff()
         self.ps[0, self.N].cuff()
         # self.ps[self.N, self.N].cuff()
@@ -146,8 +152,9 @@ class cloth:
                 self.ps[i,j].zero_force()
         for t1 in self.t1s:
             t1.compute_t1_force()
-        for t2 in self.t2s:
-            t2.compute_t2_force()
+        if self.t2:
+            for t2 in self.t2s:
+                t2.compute_t2_force()
         self.add_additional_force()
         x = np.zeros(((self.N+1)**2, 3))
 

@@ -10,11 +10,14 @@ class t1spring:
     # natural length
     L = 0
     # stiff constant
-    k = 1
+    k = 1.5
+    # activate damping
+    d = True
 
-    def __init__(self, p1, p2):
+    def __init__(self, p1, p2, d):
         self.p1 = p1
         self.p2 = p2
+        self.d = d
         self.L = np.linalg.norm(p1.getX() - p2.getX())
 
     def compute_t1_force(self):
@@ -23,7 +26,8 @@ class t1spring:
         self.f = 0
         if l > self.L:
             f = self.k * (l - self.L) * (x/l)
-            self.damp(f)
+            if self.d:
+                self.damp(f)
             self.p1.add_force(f)
             self.p2.add_force(-f)
             self.f = f

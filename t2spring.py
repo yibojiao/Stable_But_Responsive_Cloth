@@ -15,10 +15,13 @@ class t2spring:
     k = 0.001
     # constant
     c = 1
+    # activate damping
+    d = True
 
-    def __init__(self, p1, p2):
+    def __init__(self, p1, p2, d):
         self.p1 = p1
         self.p2 = p2
+        self.d = d
         self.L = np.linalg.norm(p1.getX() - p2.getX())
     
     def κ(self, x):
@@ -46,7 +49,8 @@ class t2spring:
                 fb = self.c*(l-self.L)
 
             f = fb * (x/l)
-            self.damp(f)
+            if self.d:
+                self.damp(f)
             self.p1.add_force(f)
             self.p2.add_force(-f)
             self.f = f
