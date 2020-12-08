@@ -9,7 +9,7 @@ from cloth import cloth
 from particle import particle
 
 # %%
-N = 10
+N = 15
 x0, faces = dhu.standard_rectangle(N, N, N, N)
 normals = np.zeros(faces.shape)
 normals += np.array([0,1,0])
@@ -20,7 +20,7 @@ geometry = THREE.BufferGeometry(
             'index': THREE.BufferAttribute(np.array(faces.ravel(), dtype=np.uint16)),
         }
 )
-mesh = THREE.Mesh(geometry, THREE.MeshStandardMaterial(sice='DoubleSide', wireframe=True))
+mesh = THREE.Mesh(geometry, THREE.MeshBasicMaterial(sice='DoubleSide', wireframe=True, color='red'))
 
 # %%
 def viewer_cloth(cloth):
@@ -67,8 +67,13 @@ mesh.geometry.attributes['position'].array = x0
 cloth3 = cloth(x0, N, t2=True, d=True)
 cloth3.add_springs()
 cloth3.cuff_cloth()
+cloth3.add_ball()
 t = 0
-while t < 1000:
+sphere_geo = THREE.SphereGeometry(cloth3.r-0.5, 8, 8)
+sphere = THREE.Mesh(sphere_geo, THREE.MeshBasicMaterial(wireframe=True))
+sphere.position = (5,-5,5)
+viewer.scene.add(sphere)
+while t < 300:
     delta = cloth3.time_step()
     mesh.geometry.attributes['position'].array = mesh.geometry.attributes['position'].array + delta
     t += 1

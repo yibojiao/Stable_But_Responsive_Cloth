@@ -16,7 +16,7 @@ class particle:
         # force on this particle
         self.f = np.zeros((3,))
         # time step
-        self.h = 0.002
+        self.h = 0.0005
         # index on the cloth
         self.idx = idx
     

@@ -144,7 +144,7 @@ class cloth:
     def add_additional_force(self):
         for i in range(self.N+1):
             for j in range(self.N+1):
-                self.ps[i,j].add_force([0.001, -0.01, 0])
+                self.ps[i,j].add_force([0, -0.01, 0])
     
     def time_step(self):
         for i in range(self.N+1):
@@ -162,5 +162,19 @@ class cloth:
             for j in range(self.N+1):
                 delta = self.ps[i, j].timestep()
                 x[i*(self.N+1)+j] = delta
+                
+        self.ball_col()
         return x
     
+    def add_ball(self):
+        self.r = 3
+        self.c = np.array([5, -5, 5])
+    
+    def ball_col(self):
+        for i in range(self.N+1):
+            for j in range(self.N+1):
+                d = self.ps[i,j].getx()-self.c
+                diff = np.linalg.norm(d)
+                if diff <= self.r:
+                    self.ps[i,j].x += (d/diff*(self.r-diff))
+                    self.ps[i,j].v = np.zeros((3,))
