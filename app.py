@@ -69,8 +69,8 @@ cloth3.add_springs()
 cloth3.cuff_cloth()
 cloth3.add_ball()
 t = 0
-sphere_geo = THREE.SphereGeometry(cloth3.r-0.5, 8, 8)
-sphere = THREE.Mesh(sphere_geo, THREE.MeshBasicMaterial(wireframe=True))
+sphere_geo = THREE.SphereGeometry(2.5, 8, 8)
+sphere = THREE.Mesh(sphere_geo, THREE.MeshStandardMaterial(wireframe=True))
 sphere.position = (5,-5,5)
 viewer.scene.add(sphere)
 while t < 300:
